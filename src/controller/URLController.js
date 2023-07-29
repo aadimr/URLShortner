@@ -33,16 +33,22 @@ const creatURL = async function (req, res) {
     }
 }
 
-const getURL = async function (req, res) {
+const getAllURL = async function (req,res){
+    try{
+        const allData = await URLModel.find()
+        return res.status(201).send({status:true, msg: allData})
+    }
+    catch(err){
+        return res.status(500).send({ status: false, msg: err.message });
+    }
+}
+
+const getURLWithPath = async function (req, res) {
     try {
-        let data = req.params
-        let { _id } = data
-        if (_id) {
-            data._id = _id
-        }
-        let saveData = await URLModel.find(data)
+        let data = req.params.urlCode
+        let saveData = await URLModel.findOne({urlCode:data}).select({longUrl:1,_id:0})
         if (!saveData) return res.status(401).send({ status: false, msg: "data not exist" })
-        else return res.status(201).send({ status: true, msg: saveData })
+        else return res.status(302).redirect(saveData.longUrl)
     }
     catch (err) {
         return res.status(500).send({status:false, msg:err.message})   
@@ -51,5 +57,6 @@ const getURL = async function (req, res) {
 
 module.exports = {
     creatURL,
-    getURL
+    getAllURL,
+    getURLWithPath
 }
