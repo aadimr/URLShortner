@@ -6,19 +6,19 @@ const axios = require("axios")
 const creatURL = async function (req, res) {
     try {
         let data = req.body
-        if (!data.longUrl) return res.status(401).send({ status: false, msg: "provide the details" })
+        if (!data.longUrl) return res.status(401).send({ status: false, message: "provide the details" })
         if (typeof data.longUrl !== "string" || data.longUrl.trim().length === 0) {
-            return res.status(401).send({ status: false, msg: "please provide a valid URL" })
+            return res.status(401).send({ status: false, message: "please provide a valid URL" })
         }
         if (!validURL.isUri(data.longUrl.trim())) {
-            return res.status(401).send({ status: false, msg: "please provide valid URL" })
+            return res.status(401).send({ status: false, message: "please provide valid URL" })
         }
 
         let validURLCheck = await axios.get(data.longUrl.trim())
             .then(() => data.longUrl)
             .catch(() => null)
 
-        if (!validURLCheck) return res.status(404).send({ status: false, msg: `Error! Link Not Found ${data.longUrl.trim()}` })
+        if (!validURLCheck) return res.status(404).send({ status: false, message: `Error! Link Not Found ${data.longUrl.trim()}` })
 
         let url = shortId.generate().toLowerCase()
         let baseURL = "http://localhost:3000/"
@@ -26,37 +26,50 @@ const creatURL = async function (req, res) {
         data.urlCode = url
 
         let savedata = await URLModel.create(data)
-        return res.status(201).send({ status: true, msg: savedata })
+        return res.status(201).send({ status: true, message: "URL shorted successfully", data: savedata })
     }
     catch (err) {
-        return res.status(500).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, message: err.message })
     }
 }
 
-const getAllURL = async function (req,res){
-    try{
+const getAllURL = async function (req, res) {
+    try {
         const allData = await URLModel.find()
-        return res.status(201).send({status:true, msg: allData})
+        return res.status(201).send({ status: true, message: "getting all URLs successfully", data: allData })
     }
-    catch(err){
-        return res.status(500).send({ status: false, msg: err.message });
+    catch (err) {
+        return res.status(500).send({ status: false, message: err.message });
+    }
+}
+
+const getURLByUserId = async function (req, res) {
+    try {
+        let data = req.params.userId
+        let saveData = await URLModel.findOne({ userId: data })
+        if (!saveData) return res.status(401).send({ status: false, message: "data not exist" })
+        else return res.status(301).redirect({ status: true, message: "redirecting to the actual URL", data: saveData })
+    }
+    catch (err) {
+        return res.status(500).send({ status: false, message: err.message })
     }
 }
 
 const getURLWithPath = async function (req, res) {
     try {
         let data = req.params.urlCode
-        let saveData = await URLModel.findOne({urlCode:data}).select({longUrl:1,_id:0})
-        if (!saveData) return res.status(401).send({ status: false, msg: "data not exist" })
+        let saveData = await URLModel.findOne({ urlCode: data }).select({ longUrl: 1, _id: 0 })
+        if (!saveData) return res.status(401).send({ status: false, message: "data not exist" })
         else return res.status(302).redirect(saveData.longUrl)
     }
     catch (err) {
-        return res.status(500).send({status:false, msg:err.message})   
+        return res.status(500).send({ status: false, message: err.message })
     }
 }
 
 module.exports = {
     creatURL,
     getAllURL,
+    getURLByUserId,
     getURLWithPath
 }
