@@ -13,7 +13,7 @@ const createUsers = async function (req, res) {
         if (!fullName && !emailId && !password && !confirmPassword) {
             return res.status(401).send({ status: false, message: "provide the details" })
         }
-        if (!fullName) return res.status(201).send({ status: false, message: "full name is mandatory" })
+        if (!fullName) return res.status(401).send({ status: false, message: "full name is mandatory" })
         if (typeof fullName !== "string" || fullName.trim().length === 0) {
             return res.status(401).send({ status: false, message: "please provide a valid name" })
         }
