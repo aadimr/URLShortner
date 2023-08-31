@@ -8,9 +8,9 @@ const { fetchuser } = require("../middleware/fetchUser")
 router.post("/users", createUsers);
 router.post("/loginUser", loginUser);
 router.post("/getUsers", fetchuser, getUser)
-router.post("/url/shorten", creatURL);
+router.post("/shortenUrl", creatURL);
 router.get("/getURL", getAllURL);
-router.get("/:userId", getURLByUserId);
-router.get("/:urlCode", getURLWithPath);
+router.get("/user/:userId", getURLByUserId);
+router.get("/url/:urlCode", getURLWithPath);
 
 module.exports = router
