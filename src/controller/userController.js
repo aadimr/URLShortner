@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
         let userExist = await userModel.findOne({ $or: [{ emailId: emailId }] })
         if (!userExist) { return res.status(404).send({ status: false, message: "User doesn't exists !" }) }
         if (userExist.password != password) { return res.status(400).send({ status: false, message: "Please enter correct password" }) }
-        let token = jwt.sign({ userId: userExist._id, email: userExist.emailId, }, JWT_SECRET, { expiresIn: "1096h" })
+        let token = jwt.sign({ userId: userExist._id, email: userExist.emailId, userName: userExist.fullName }, JWT_SECRET, { expiresIn: "1096h" })
         let saveData = {
             token: token
         }
