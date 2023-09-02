@@ -4,6 +4,7 @@ const route = require("./routes/route");
 const { default: mongoose } = require("mongoose");
 const app = express();
 const cors = require('cors')
+require("dotenv").config()
 
 app.use(cors());
 
@@ -11,9 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect("mongodb+srv://aadi-014:aadi4596@cluster0.9bkexud.mongodb.net/URLShortner?retryWrites=true&w=majority",{
-    useNewUrlParser: true
-})
+mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("MongoDb is connected"))
 .catch(err => console.log(err))
 
