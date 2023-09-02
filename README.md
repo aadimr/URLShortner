@@ -26,9 +26,6 @@ Some of the use cases for URL shortening is to optimise links shared across user
 ## Author
 -  Aditya Shaw
 
-## Deployment Link
--
-
 ## Models
 
 1. ### User Model
