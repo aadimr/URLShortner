@@ -5,6 +5,7 @@ const { default: mongoose } = require("mongoose");
 const app = express();
 const cors = require('cors')
 require("dotenv").config()
+const url = process.env.MONGO_URL
 
 app.use(cors());
 
@@ -12,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(url,{ useNewUrlParser: true })
 .then(() => console.log("MongoDb is connected"))
 .catch(err => console.log(err))
 
