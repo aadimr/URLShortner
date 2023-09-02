@@ -53,7 +53,7 @@ Some of the use cases for URL shortening is to optimise links shared across user
     }
 }
 ```
-2. ### Shortened URL 
+2. ### Shortened URL Model
 ```
 {
    userId: {
