@@ -21,7 +21,7 @@ const creatURL = async function (req, res) {
         if (!validURLCheck) return res.status(404).send({ status: false, message: `Error! Link Not Found ${data.longUrl.trim()}` })
 
         let url = shortId.generate().toLowerCase()
-        let baseURL = "http://localhost:3000/url/"
+        let baseURL = "https://linkswift-endb.onrender.com/url/"
         data.shortUrl = baseURL + url
         data.urlCode = url
 
